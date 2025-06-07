@@ -1,0 +1,563 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="CalorSmart - Registro de Consumo">
+  <Header />
+  
+  <main class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+    <section class="py-6">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Título discreto como dashboard -->
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-gray-900 mb-1">Registro de Consumo</h1>
+          <p class="text-gray-600 text-sm">Registra tu consumo de calefacción y obtén análisis personalizados</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <!-- Formulario Principal -->
+          <div class="xl:col-span-2">
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
+              <!-- Header del formulario -->
+              <div class="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                  </svg>
+                  Nuevo Registro
+                </h2>
+                <p class="text-white/90 text-sm">Completa todos los campos para un análisis preciso</p>
+              </div>
+
+              <!-- Formulario -->
+              <form id="registro-form" class="p-6 space-y-6">
+                <!-- Tipo de Calefacción -->
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Calefacción</label>
+                  <div class="grid grid-cols-3 gap-3">
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="tipo" value="pellet" class="sr-only peer">
+                      <div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg border-2 border-gray-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all duration-200 hover:border-orange-300">
+                        <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center mb-2">
+                          <span class="text-white text-sm">🔥</span>
+                        </div>
+                        <span class="text-xs font-medium text-gray-700">Pellet</span>
+                      </div>
+                    </label>
+                    
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="tipo" value="gas" class="sr-only peer">
+                      <div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg border-2 border-gray-200 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all duration-200 hover:border-blue-300">
+                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mb-2">
+                          <span class="text-white text-sm">⛽</span>
+                        </div>
+                        <span class="text-xs font-medium text-gray-700">Gas</span>
+                      </div>
+                    </label>
+                    
+                    <label class="relative cursor-pointer">
+                      <input type="radio" name="tipo" value="electric" class="sr-only peer">
+                      <div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg border-2 border-gray-200 peer-checked:border-yellow-500 peer-checked:bg-yellow-50 transition-all duration-200 hover:border-yellow-300">
+                        <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center mb-2">
+                          <span class="text-white text-sm">⚡</span>
+                        </div>
+                        <span class="text-xs font-medium text-gray-700">Eléctrica</span>
+                      </div>
+                    </label>
+                  </div>
+                  <div class="error-message hidden" data-field="tipo"></div>
+                </div>
+
+                <!-- Cantidad y Fecha -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label for="cantidad" class="block text-sm font-semibold text-gray-700 mb-2">
+                      Cantidad <span class="text-xs text-gray-500" id="unidad-label">(kg/m³/kWh)</span>
+                    </label>
+                    <div class="relative">
+                      <input 
+                        type="number" 
+                        id="cantidad" 
+                        name="cantidad" 
+                        step="0.1" 
+                        min="0.1"
+                        class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
+                        placeholder="Ej: 15.5"
+                      >
+                      <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <span class="text-gray-400 text-sm" id="unidad-display">kg</span>
+                      </div>
+                    </div>
+                    <div class="error-message hidden" data-field="cantidad"></div>
+                  </div>
+
+                  <div>
+                    <label for="fecha" class="block text-sm font-semibold text-gray-700 mb-2">Fecha</label>
+                    <input 
+                      type="date" 
+                      id="fecha" 
+                      name="fecha" 
+                      class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
+                    >
+                    <div class="error-message hidden" data-field="fecha"></div>
+                  </div>
+                </div>
+
+                <!-- Espacio y Horas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label for="espacio" class="block text-sm font-semibold text-gray-700 mb-2">Tamaño del Espacio (m²)</label>
+                    <input 
+                      type="number" 
+                      id="espacio" 
+                      name="espacio" 
+                      min="1" 
+                      max="500"
+                      class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
+                      placeholder="Ej: 45"
+                    >
+                    <div class="error-message hidden" data-field="espacio"></div>
+                  </div>
+
+                  <div>
+                    <label for="horas" class="block text-sm font-semibold text-gray-700 mb-2">Horas de Uso</label>
+                    <input 
+                      type="number" 
+                      id="horas" 
+                      name="horas" 
+                      min="0.5" 
+                      max="24" 
+                      step="0.5"
+                      class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm"
+                      placeholder="Ej: 8"
+                    >
+                    <div class="error-message hidden" data-field="horas"></div>
+                  </div>
+                </div>
+
+                <!-- Temperatura -->
+                <div>
+                  <label for="temperatura" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Temperatura Promedio: <span id="temp-value" class="text-blue-600 font-bold">20°C</span>
+                  </label>
+                  <div class="relative">
+                    <input 
+                      type="range" 
+                      id="temperatura" 
+                      name="temperatura" 
+                      min="15" 
+                      max="28" 
+                      value="20"
+                      class="w-full h-2 bg-gradient-to-r from-blue-400 via-green-400 to-red-400 rounded-lg appearance-none cursor-pointer slider"
+                    >
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>15°C</span>
+                      <span class="text-green-600 font-medium">Óptimo: 18-21°C</span>
+                      <span>28°C</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex space-x-3 pt-2">
+                  <button 
+                    type="submit" 
+                    class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-sm"
+                  >
+                    Registrar Consumo
+                  </button>
+                  <button 
+                    type="button" 
+                    id="limpiar-form"
+                    class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-all duration-200 text-sm"
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Panel Lateral -->
+          <div class="space-y-6">
+            <!-- Resumen en Tiempo Real -->
+            <div class="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+              <div class="relative">
+                <div class="flex items-center mb-4">
+                  <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Resumen Actual</h3>
+                    <p class="text-white/80 text-sm">Cálculo en tiempo real</p>
+                  </div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                    <span class="text-white/90 font-medium">💰 Costo estimado:</span>
+                    <span class="font-bold text-lg" id="costo-estimado">$0</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                    <span class="text-white/90 font-medium">🌍 CO₂ generado:</span>
+                    <span class="font-bold text-lg" id="co2-estimado">0 kg</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+                    <span class="text-white/90 font-medium">⚡ Eficiencia:</span>
+                    <span class="font-bold text-lg" id="eficiencia-estimada">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Historial Reciente -->
+            <div class="bg-white/90 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20">
+              <h3 class="font-bold text-gray-900 mb-4 text-lg flex items-center">
+                <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Registros Recientes
+              </h3>
+              <div id="historial-reciente" class="space-y-3 max-h-64 overflow-y-auto">
+                <div class="text-center text-gray-500 py-8">
+                  <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </div>
+                  <p class="font-medium">No hay registros aún</p>
+                  <p class="text-sm">¡Agrega tu primer consumo!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script>
+    import { toast } from '../components/Toast.ts';
+    
+    // Tipos de datos
+    interface ConsumptionRecord {
+      id: string;
+      date: string;
+      type: 'pellet' | 'gas' | 'electric';
+      amount: number;
+      roomSize: number;
+      hoursUsed: number;
+      temperature: number;
+      cost: number;
+      emissions: number;
+    }
+
+    // Factores de conversión y precios (datos de ejemplo para Chile)
+    const CONVERSION_FACTORS = {
+      pellet: {
+        energyPerKg: 4.5, // kWh por kg
+        costPerKg: 350, // pesos chilenos por kg
+        co2PerKg: 0.1, // kg CO2 por kg pellet
+        unit: 'kg'
+      },
+      gas: {
+        energyPerM3: 10.5, // kWh por m³
+        costPerM3: 650, // pesos chilenos por m³
+        co2PerM3: 2.3, // kg CO2 por m³
+        unit: 'm³'
+      },
+      electric: {
+        energyPerKwh: 1, // kWh por kWh
+        costPerKwh: 150, // pesos chilenos por kWh
+        co2PerKwh: 0.4, // kg CO2 por kWh
+        unit: 'kWh'
+      }
+    };
+
+    // Gestión de datos
+    class DataManager {
+      private storageKey = 'calorSmart_data';
+
+      saveRecord(record: ConsumptionRecord): void {
+        const records = this.getRecords();
+        records.push(record);
+        localStorage.setItem(this.storageKey, JSON.stringify(records));
+      }
+
+      getRecords(): ConsumptionRecord[] {
+        const data = localStorage.getItem(this.storageKey);
+        return data ? JSON.parse(data) : [];
+      }
+    }
+
+    // Validaciones personalizadas
+    class FormValidator {
+      private errors: { [key: string]: string } = {};
+
+      validate(formData: FormData): boolean {
+        this.errors = {};
+
+        // Validar tipo
+        const tipo = formData.get('tipo') as string;
+        if (!tipo) {
+          this.errors.tipo = 'Debes seleccionar un tipo de calefacción';
+        }
+
+        // Validar cantidad
+        const cantidad = parseFloat(formData.get('cantidad') as string);
+        if (!cantidad || cantidad <= 0) {
+          this.errors.cantidad = 'La cantidad debe ser mayor a 0';
+        } else if (cantidad > 1000) {
+          this.errors.cantidad = 'La cantidad parece demasiado alta';
+        }
+
+        // Validar fecha
+        const fecha = formData.get('fecha') as string;
+        if (!fecha) {
+          this.errors.fecha = 'La fecha es obligatoria';
+        } else {
+          const fechaObj = new Date(fecha);
+          const hoy = new Date();
+          if (fechaObj > hoy) {
+            this.errors.fecha = 'La fecha no puede ser futura';
+          }
+        }
+
+        // Validar espacio
+        const espacio = parseFloat(formData.get('espacio') as string);
+        if (!espacio || espacio <= 0) {
+          this.errors.espacio = 'El tamaño del espacio debe ser mayor a 0';
+        } else if (espacio > 500) {
+          this.errors.espacio = 'El espacio parece demasiado grande';
+        }
+
+        // Validar horas
+        const horas = parseFloat(formData.get('horas') as string);
+        if (!horas || horas <= 0) {
+          this.errors.horas = 'Las horas de uso deben ser mayor a 0';
+        } else if (horas > 24) {
+          this.errors.horas = 'Las horas no pueden ser más de 24';
+        }
+
+        return Object.keys(this.errors).length === 0;
+      }
+
+      showErrors(): void {
+        // Limpiar errores anteriores
+        document.querySelectorAll('.error-message').forEach(el => {
+          el.classList.add('hidden');
+          el.textContent = '';
+        });
+
+        // Mostrar nuevos errores
+        Object.entries(this.errors).forEach(([field, message]) => {
+          const errorEl = document.querySelector(`[data-field="${field}"]`) as HTMLElement;
+          if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
+            errorEl.className = 'error-message text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-2 flex items-center';
+            errorEl.innerHTML = `
+              <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              ${message}
+            `;
+          }
+        });
+      }
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      const dataManager = new DataManager();
+      const validator = new FormValidator();
+      const form = document.getElementById('registro-form') as HTMLFormElement;
+
+      // Actualizar unidades según tipo seleccionado
+      function updateUnits() {
+        const selectedType = document.querySelector('input[name="tipo"]:checked') as HTMLInputElement;
+        const unitLabel = document.getElementById('unidad-label');
+        const unitDisplay = document.getElementById('unidad-display');
+        
+        if (selectedType && unitLabel && unitDisplay) {
+          const factor = CONVERSION_FACTORS[selectedType.value as keyof typeof CONVERSION_FACTORS];
+          unitLabel.textContent = `(${factor.unit})`;
+          unitDisplay.textContent = factor.unit;
+        }
+      }
+
+      // Actualizar temperatura
+      function updateTemperature() {
+        const tempSlider = document.getElementById('temperatura') as HTMLInputElement;
+        const tempValue = document.getElementById('temp-value');
+        
+        if (tempSlider && tempValue) {
+          tempValue.textContent = `${tempSlider.value}°C`;
+        }
+      }
+
+             // Calcular estimaciones en tiempo real
+       function updateEstimates() {
+         const formData = new FormData(form);
+         const tipo = formData.get('tipo') as string;
+         const cantidad = parseFloat(formData.get('cantidad') as string) || 0;
+         
+         if (tipo && cantidad > 0) {
+           let cost = 0;
+           let emissions = 0;
+           
+           // Calcular según el tipo
+           if (tipo === 'pellet') {
+             const factor = CONVERSION_FACTORS.pellet;
+             cost = cantidad * factor.costPerKg;
+             emissions = cantidad * factor.co2PerKg;
+           } else if (tipo === 'gas') {
+             const factor = CONVERSION_FACTORS.gas;
+             cost = cantidad * factor.costPerM3;
+             emissions = cantidad * factor.co2PerM3;
+           } else if (tipo === 'electric') {
+             const factor = CONVERSION_FACTORS.electric;
+             cost = cantidad * factor.costPerKwh;
+             emissions = cantidad * factor.co2PerKwh;
+           }
+           
+           const costoEl = document.getElementById('costo-estimado');
+           const co2El = document.getElementById('co2-estimado');
+           const eficienciaEl = document.getElementById('eficiencia-estimada');
+           
+           if (costoEl) costoEl.textContent = `$${Math.round(cost).toLocaleString()}`;
+           if (co2El) co2El.textContent = `${Math.round(emissions * 100) / 100} kg`;
+           if (eficienciaEl) {
+             const efficiency = Math.max(0, Math.min(100, 100 - (emissions * 10)));
+             eficienciaEl.textContent = `${Math.round(efficiency)}%`;
+           }
+         }
+       }
+
+      // Cargar historial
+      function loadHistory() {
+        const records = dataManager.getRecords();
+        const historialEl = document.getElementById('historial-reciente');
+        
+        if (historialEl && records.length > 0) {
+          const recentRecords = records.slice(-5).reverse();
+          historialEl.innerHTML = recentRecords.map(record => `
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                  <span class="text-white text-xs">${record.type === 'pellet' ? '🔥' : record.type === 'gas' ? '⛽' : '⚡'}</span>
+                </div>
+                <div>
+                  <p class="font-medium text-sm text-gray-900">${record.amount} ${CONVERSION_FACTORS[record.type].unit}</p>
+                  <p class="text-xs text-gray-500">${new Date(record.date).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-bold text-sm text-gray-900">$${Math.round(record.cost).toLocaleString()}</p>
+                <p class="text-xs text-gray-500">${Math.round(record.emissions * 100) / 100} kg CO₂</p>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      // Event listeners
+      document.querySelectorAll('input[name="tipo"]').forEach(input => {
+        input.addEventListener('change', () => {
+          updateUnits();
+          updateEstimates();
+        });
+      });
+
+      document.getElementById('temperatura')?.addEventListener('input', updateTemperature);
+      
+      ['cantidad', 'espacio', 'horas'].forEach(fieldName => {
+        document.getElementById(fieldName)?.addEventListener('input', updateEstimates);
+      });
+
+      // Limpiar formulario
+      document.getElementById('limpiar-form')?.addEventListener('click', () => {
+        form.reset();
+        document.querySelectorAll('.error-message').forEach(el => el.classList.add('hidden'));
+        updateTemperature();
+        updateEstimates();
+        toast.info('Formulario limpiado', 'Listo para nuevo registro');
+      });
+
+      // Submit del formulario
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        
+        if (validator.validate(formData)) {
+          const tipo = formData.get('tipo') as string;
+          const cantidad = parseFloat(formData.get('cantidad') as string);
+          const fecha = formData.get('fecha') as string;
+          const espacio = parseFloat(formData.get('espacio') as string);
+          const horas = parseFloat(formData.get('horas') as string);
+          const temperatura = parseFloat(formData.get('temperatura') as string);
+          
+                     let cost = 0;
+           let emissions = 0;
+           
+           // Calcular según el tipo
+           if (tipo === 'pellet') {
+             const factor = CONVERSION_FACTORS.pellet;
+             cost = cantidad * factor.costPerKg;
+             emissions = cantidad * factor.co2PerKg;
+           } else if (tipo === 'gas') {
+             const factor = CONVERSION_FACTORS.gas;
+             cost = cantidad * factor.costPerM3;
+             emissions = cantidad * factor.co2PerM3;
+           } else if (tipo === 'electric') {
+             const factor = CONVERSION_FACTORS.electric;
+             cost = cantidad * factor.costPerKwh;
+             emissions = cantidad * factor.co2PerKwh;
+           }
+          
+          const record: ConsumptionRecord = {
+            id: Date.now().toString(),
+            date: fecha,
+            type: tipo as 'pellet' | 'gas' | 'electric',
+            amount: cantidad,
+            roomSize: espacio,
+            hoursUsed: horas,
+            temperature: temperatura,
+            cost: cost,
+            emissions: emissions
+          };
+          
+          dataManager.saveRecord(record);
+          
+          toast.success(
+            `Registro guardado exitosamente. Costo: $${Math.round(cost).toLocaleString()}`,
+            '¡Consumo registrado!'
+          );
+          
+          // Redirigir al dashboard después de 2 segundos
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 2000);
+          
+        } else {
+          validator.showErrors();
+          toast.error('Por favor corrige los errores en el formulario', 'Formulario incompleto');
+        }
+      });
+
+      // Inicializar
+      const today = new Date().toISOString().split('T')[0];
+      const fechaInput = document.getElementById('fecha') as HTMLInputElement;
+      if (fechaInput) fechaInput.value = today;
+      
+      updateTemperature();
+      loadHistory();
+    });
+  </script>
+</Layout> 

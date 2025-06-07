@@ -1,0 +1,266 @@
+<section id="dashboard" class="py-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Título discreto -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Dashboard</h1>
+      <p class="text-gray-600 text-sm">Monitorea tu consumo energético y optimiza tu eficiencia</p>
+    </div>
+
+    <!-- Estadísticas Principales -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <!-- Consumo Mensual -->
+      <div class="group relative bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-white/20 hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center shadow-md">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Este Mes</div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Consumo Energético</h3>
+            <p class="text-2xl font-bold text-gray-900" id="monthly-consumption">0 kWh</p>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold text-green-600" id="consumption-change">+0%</span>
+              <span class="text-xs text-gray-500">vs mes anterior</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gasto Mensual -->
+      <div class="group relative bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-white/20 hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-lg flex items-center justify-center shadow-md">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+              </svg>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Gasto</div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Costo Mensual</h3>
+            <p class="text-2xl font-bold text-gray-900" id="monthly-cost">$0</p>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold text-red-600" id="cost-change">+0%</span>
+              <span class="text-xs text-gray-500">vs mes anterior</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emisiones CO2 -->
+      <div class="group relative bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-white/20 hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-pink-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center shadow-md">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
+              </svg>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-semibold text-red-600 uppercase tracking-wider">Huella</div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Emisiones CO₂</h3>
+            <p class="text-2xl font-bold text-gray-900" id="monthly-emissions">0 kg</p>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold text-green-600" id="emissions-change">-0%</span>
+              <span class="text-xs text-gray-500">vs mes anterior</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Score de Eficiencia -->
+      <div class="group relative bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 border border-white/20 hover:scale-105">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-md">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+              </svg>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-semibold text-purple-600 uppercase tracking-wider">Score</div>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Eficiencia</h3>
+            <p class="text-2xl font-bold text-gray-900" id="efficiency-score">0%</p>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold text-blue-600">Excelente</span>
+              <span class="text-xs text-gray-500">calificación</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico y Tips Section -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <!-- Gráfico de Consumo Semanal -->
+      <div class="xl:col-span-2 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 mb-1">Consumo Semanal</h3>
+            <p class="text-gray-600 text-sm">Análisis detallado de tu consumo energético</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2">
+              <div class="w-2.5 h-2.5 bg-orange-500 rounded-full"></div>
+              <span class="text-xs font-medium text-gray-600">kWh consumidos</span>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-500">Máximo semanal</div>
+              <div class="text-sm font-bold text-gray-900" id="max-weekly-consumption">0 kWh</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contenedor del gráfico con escala -->
+        <div class="relative">
+          <!-- Escala vertical -->
+          <div class="absolute left-0 top-0 h-64 flex flex-col justify-between text-xs text-gray-500 font-medium" id="chart-scale">
+            <span>50</span>
+            <span>40</span>
+            <span>30</span>
+            <span>20</span>
+            <span>10</span>
+            <span>0</span>
+          </div>
+          
+          <!-- Líneas de referencia horizontales -->
+          <div class="absolute left-8 top-0 right-4 h-64 flex flex-col justify-between pointer-events-none">
+            <div class="border-t border-gray-200 border-dashed"></div>
+            <div class="border-t border-gray-200 border-dashed"></div>
+            <div class="border-t border-gray-200 border-dashed"></div>
+            <div class="border-t border-gray-200 border-dashed"></div>
+            <div class="border-t border-gray-200 border-dashed"></div>
+            <div class="border-t border-gray-300"></div>
+          </div>
+          
+          <!-- Área del gráfico -->
+          <div class="ml-8 mr-4 h-64 flex items-end justify-between space-x-2 bg-gradient-to-t from-gray-50/50 to-transparent rounded-lg p-4 relative" id="weekly-chart">
+            <!-- Barras del gráfico se generarán dinámicamente -->
+          </div>
+        </div>
+        
+        <!-- Etiquetas de días -->
+        <div class="flex justify-between text-xs font-semibold text-gray-500 mt-3 ml-8 mr-4 px-4">
+          <span>LUN</span>
+          <span>MAR</span>
+          <span>MIÉ</span>
+          <span>JUE</span>
+          <span>VIE</span>
+          <span>SÁB</span>
+          <span>DOM</span>
+        </div>
+        
+        <!-- Estadísticas adicionales -->
+        <div class="mt-4 grid grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+          <div class="text-center">
+            <div class="text-xs text-gray-500">Promedio Diario</div>
+            <div class="text-sm font-bold text-gray-900" id="avg-daily-consumption">0 kWh</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-gray-500">Total Semanal</div>
+            <div class="text-sm font-bold text-gray-900" id="total-weekly-consumption">0 kWh</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-gray-500">Tendencia</div>
+            <div class="text-sm font-bold" id="weekly-trend">
+              <span class="text-green-600">↓ -5%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips de Ahorro Inteligentes -->
+      <div class="bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl p-6 shadow-lg text-white relative overflow-hidden">
+        <!-- Patrón de fondo -->
+        <div class="absolute inset-0 opacity-10">
+          <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+            <defs>
+              <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="100" height="100" fill="url(#grid)"/>
+          </svg>
+        </div>
+        
+        <div class="relative">
+          <div class="flex items-center mb-4">
+            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold mb-0.5">Tips Inteligentes</h3>
+              <p class="text-white/80 text-xs">Ahorro personalizado</p>
+            </div>
+          </div>
+          
+          <div class="space-y-4" id="smart-tips">
+            <div class="flex items-start space-x-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div class="w-7 h-7 bg-white/20 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-sm">🌡️</span>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-0.5 text-sm">Temperatura Óptima</h4>
+                <p class="text-xs text-white/90 leading-relaxed">Reduce 1°C para ahorrar hasta $12.000 mensuales</p>
+                <div class="mt-1.5 text-xs bg-white/20 rounded-full px-2 py-0.5 inline-block">
+                  💰 Ahorro: $12.000/mes
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div class="w-7 h-7 bg-white/20 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-sm">⏰</span>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-0.5 text-sm">Programación Smart</h4>
+                <p class="text-xs text-white/90 leading-relaxed">Programa 30min antes de llegar a casa</p>
+                <div class="mt-1.5 text-xs bg-white/20 rounded-full px-2 py-0.5 inline-block">
+                  ⚡ Ahorro: 15% energía
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div class="w-7 h-7 bg-white/20 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-sm">🏠</span>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-0.5 text-sm">Aislamiento Mejorado</h4>
+                <p class="text-xs text-white/90 leading-relaxed">Sella ventanas para reducir 30% el consumo</p>
+                <div class="mt-1.5 text-xs bg-white/20 rounded-full px-2 py-0.5 inline-block">
+                  🌍 -120kg CO₂/año
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button class="mt-4 w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/40 text-sm">
+            Ver Más Consejos Personalizados
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> 

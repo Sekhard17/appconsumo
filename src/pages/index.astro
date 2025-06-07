@@ -1,16 +1,414 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Dashboard from '../components/Dashboard.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="CalorSmart - Optimiza tu Calefacción">
+  <Header />
+  
+  <main>
+    <Dashboard />
+  </main>
+  
+  <!-- Scripts -->
+  <script>
+    import { toast } from '../components/Toast.ts';
+    
+    // Tipos de datos
+    interface ConsumptionRecord {
+      id: string;
+      date: string;
+      type: 'pellet' | 'gas' | 'electric';
+      amount: number;
+      roomSize: number;
+      hoursUsed: number;
+      temperature: number;
+      cost: number;
+      emissions: number;
+    }
+
+    // Factores de conversión y precios (datos de ejemplo para Chile)
+    const CONVERSION_FACTORS = {
+      pellet: {
+        energyPerKg: 4.5, // kWh por kg
+        costPerKg: 350, // pesos chilenos por kg
+        co2PerKg: 0.1, // kg CO2 por kg pellet
+        unit: 'kg'
+      },
+      gas: {
+        energyPerM3: 10.5, // kWh por m³
+        costPerM3: 650, // pesos chilenos por m³
+        co2PerM3: 2.3, // kg CO2 por m³
+        unit: 'm³'
+      },
+      electric: {
+        energyPerKwh: 1, // kWh por kWh
+        costPerKwh: 150, // pesos chilenos por kWh
+        co2PerKwh: 0.4, // kg CO2 por kWh
+        unit: 'kWh'
+      }
+    };
+
+    // Gestión de datos
+    class DataManager {
+      private storageKey = 'calorSmart_data';
+
+      saveRecord(record: ConsumptionRecord): void {
+        const records = this.getRecords();
+        records.push(record);
+        localStorage.setItem(this.storageKey, JSON.stringify(records));
+      }
+
+      getRecords(): ConsumptionRecord[] {
+        const data = localStorage.getItem(this.storageKey);
+        return data ? JSON.parse(data) : [];
+      }
+
+      getMonthlyStats() {
+        const records = this.getRecords();
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        
+        const monthlyRecords = records.filter(record => {
+          const recordDate = new Date(record.date);
+          return recordDate.getMonth() === currentMonth && 
+                 recordDate.getFullYear() === currentYear;
+        });
+
+        const totalConsumption = monthlyRecords.reduce((sum, record) => {
+          const factor = CONVERSION_FACTORS[record.type];
+          let energyValue = 0;
+          if ('energyPerKg' in factor) energyValue = factor.energyPerKg;
+          else if ('energyPerM3' in factor) energyValue = factor.energyPerM3;
+          else if ('energyPerKwh' in factor) energyValue = factor.energyPerKwh;
+          return sum + (record.amount * energyValue);
+        }, 0);
+
+        const totalCost = monthlyRecords.reduce((sum, record) => sum + record.cost, 0);
+        const totalEmissions = monthlyRecords.reduce((sum, record) => sum + record.emissions, 0);
+
+        return {
+          consumption: totalConsumption,
+          cost: totalCost,
+          emissions: totalEmissions,
+          recordCount: monthlyRecords.length
+        };
+      }
+
+      getWeeklyData() {
+        const records = this.getRecords();
+        console.log('Total records:', records.length, records);
+        
+        const now = new Date();
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        
+        console.log('Fecha actual:', now.toISOString());
+        console.log('Hace una semana:', weekAgo.toISOString());
+        
+        const weeklyRecords = records.filter(record => {
+          const recordDate = new Date(record.date);
+          const isInRange = recordDate >= weekAgo && recordDate <= now;
+          console.log(`Registro ${record.date}: ${isInRange ? 'INCLUIDO' : 'EXCLUIDO'}`);
+          return isInRange;
+        });
+
+        console.log('Registros de la semana:', weeklyRecords.length);
+
+        // Agrupar por día de la semana (0=Domingo, 1=Lunes, etc.)
+        const dailyData = Array(7).fill(0);
+        weeklyRecords.forEach(record => {
+          const recordDate = new Date(record.date);
+          const dayIndex = recordDate.getDay();
+          const factor = CONVERSION_FACTORS[record.type];
+          let energyValue = 0;
+          if ('energyPerKg' in factor) energyValue = factor.energyPerKg;
+          else if ('energyPerM3' in factor) energyValue = factor.energyPerM3;
+          else if ('energyPerKwh' in factor) energyValue = factor.energyPerKwh;
+          
+          const consumption = record.amount * energyValue;
+          dailyData[dayIndex] += consumption;
+          console.log(`Día ${dayIndex} (${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][dayIndex]}): +${consumption} kWh`);
+        });
+
+        console.log('Datos diarios finales:', dailyData);
+
+        // Si hay datos reales de la semana, usarlos
+        const hasWeeklyData = dailyData.some(val => val > 0);
+        if (hasWeeklyData) {
+          return dailyData;
+        }
+
+        // Si no hay datos de la semana pero hay registros históricos, crear patrón basado en promedio
+        if (records.length > 0) {
+          const avgConsumption = records.reduce((sum, record) => {
+            const factor = CONVERSION_FACTORS[record.type];
+            let energyValue = 0;
+            if ('energyPerKg' in factor) energyValue = factor.energyPerKg;
+            else if ('energyPerM3' in factor) energyValue = factor.energyPerM3;
+            else if ('energyPerKwh' in factor) energyValue = factor.energyPerKwh;
+            return sum + (record.amount * energyValue);
+          }, 0) / records.length;
+
+          console.log('Usando datos simulados basados en promedio:', avgConsumption);
+          
+          // Generar patrón semanal realista
+          return [
+            avgConsumption * 0.7, // Domingo
+            avgConsumption * 0.8, // Lunes
+            avgConsumption * 0.9, // Martes  
+            avgConsumption * 1.1, // Miércoles
+            avgConsumption * 1.0, // Jueves
+            avgConsumption * 1.2, // Viernes
+            avgConsumption * 1.3  // Sábado
+          ];
+        }
+
+        // Sin datos, devolver array vacío
+        return dailyData;
+      }
+    }
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      const dataManager = new DataManager();
+      
+      // Funciones de actualización de UI
+      function updateDashboard() {
+        const stats = dataManager.getMonthlyStats();
+        
+        // Actualizar estadísticas
+        const consumptionEl = document.getElementById('monthly-consumption');
+        const costEl = document.getElementById('monthly-cost');
+        const emissionsEl = document.getElementById('monthly-emissions');
+        const efficiencyEl = document.getElementById('efficiency-score');
+
+        if (consumptionEl) {
+          consumptionEl.textContent = `${Math.round(stats.consumption)} kWh`;
+        }
+        if (costEl) {
+          costEl.textContent = `$${Math.round(stats.cost).toLocaleString()}`;
+        }
+        if (emissionsEl) {
+          emissionsEl.textContent = `${Math.round(stats.emissions)} kg`;
+        }
+        if (efficiencyEl) {
+          // Calcular eficiencia basada en consumo promedio
+          const efficiency = Math.max(0, Math.min(100, 100 - (stats.consumption / 10)));
+          efficiencyEl.textContent = `${Math.round(efficiency)}%`;
+        }
+
+        // Actualizar gráfico semanal
+        updateWeeklyChart();
+        
+        // Actualizar tips inteligentes
+        updateSmartTips();
+      }
+
+      function updateWeeklyChart() {
+        console.log('=== ACTUALIZANDO GRÁFICO SEMANAL ===');
+        const weeklyData = dataManager.getWeeklyData();
+        console.log('Datos semanales recibidos:', weeklyData);
+        const chartContainer = document.getElementById('weekly-chart');
+        
+        if (chartContainer) {
+          chartContainer.innerHTML = '';
+          
+          // Usar los datos reales directamente
+          const hasRealData = weeklyData.some(val => val > 0);
+          let displayData = weeklyData;
+          
+          const maxValue = Math.max(...displayData, 1);
+          // Ajustar escala dinámicamente basada en los datos reales
+          let chartMaxValue;
+          if (maxValue <= 20) {
+            chartMaxValue = 20;
+          } else if (maxValue <= 50) {
+            chartMaxValue = Math.ceil(maxValue / 10) * 10;
+          } else {
+            chartMaxValue = Math.ceil(maxValue / 20) * 20;
+          }
+          console.log(`Valor máximo: ${maxValue}, Escala del gráfico: ${chartMaxValue}`);
+          
+          // Actualizar escala vertical
+          const scaleContainer = document.getElementById('chart-scale');
+          if (scaleContainer) {
+            const scaleValues = [];
+            for (let i = 5; i >= 0; i--) {
+              scaleValues.push(Math.round((chartMaxValue / 5) * i));
+            }
+            scaleContainer.innerHTML = scaleValues.map(val => `<span>${val}</span>`).join('');
+          }
+          
+          // Crear barras con valores
+          displayData.forEach((value, index) => {
+            const barContainer = document.createElement('div');
+            barContainer.className = 'flex flex-col items-center justify-end relative group h-full';
+            barContainer.style.width = '12%';
+            barContainer.style.height = '100%';
+            
+            // Valor encima de la barra
+            const valueLabel = document.createElement('div');
+            valueLabel.className = 'text-xs font-semibold text-gray-700 mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200';
+            valueLabel.textContent = `${Math.round(value * 10) / 10}`;
+            
+            // Barra principal
+            const bar = document.createElement('div');
+            const heightPercent = value > 0 ? (value / chartMaxValue) * 100 : 2;
+            const height = value > 0 ? Math.max(heightPercent, 10) : 2; // Altura mínima más visible para datos reales
+            
+            console.log(`Día ${index}: valor=${value}, chartMaxValue=${chartMaxValue}, heightPercent=${heightPercent}%, height final=${height}%`);
+            
+            bar.className = value > 0 
+              ? 'bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg transition-all duration-300 hover:from-orange-600 hover:to-orange-500 cursor-pointer shadow-sm hover:shadow-md w-full relative'
+              : 'bg-gray-200 rounded-t-lg w-full relative opacity-30';
+            bar.style.height = `${height}%`;
+            bar.style.maxHeight = '100%';
+            if (value > 0) {
+              bar.style.minHeight = '10px'; // Altura mínima más visible
+            }
+            
+            // Debug: asegurar que la barra sea visible
+            console.log(`Día ${index}: valor=${value}, altura=${height}%, hasRealData=${hasRealData}`);
+            
+            // Tooltip mejorado
+            const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const tooltipText = hasRealData 
+              ? `${dayNames[index]}: ${Math.round(value * 10) / 10} kWh`
+              : `${dayNames[index]}: ${Math.round(value * 10) / 10} kWh (ejemplo)`;
+            bar.title = tooltipText;
+            
+            // Efecto hover con valor
+            bar.addEventListener('mouseenter', () => {
+              valueLabel.style.opacity = '1';
+              bar.style.transform = 'scaleY(1.05)';
+            });
+            
+            bar.addEventListener('mouseleave', () => {
+              valueLabel.style.opacity = '0';
+              bar.style.transform = 'scaleY(1)';
+            });
+            
+            barContainer.appendChild(valueLabel);
+            barContainer.appendChild(bar);
+            chartContainer.appendChild(barContainer);
+          });
+          
+          // Mostrar mensaje si son datos de ejemplo
+          if (!hasRealData) {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'absolute top-2 right-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded';
+            messageEl.textContent = 'Datos de ejemplo - Agrega registros para ver datos reales';
+            chartContainer.appendChild(messageEl);
+          }
+          
+          // Actualizar estadísticas adicionales
+          updateWeeklyStats(displayData);
+        }
+      }
+      
+      function updateWeeklyStats(weeklyData: number[]) {
+        const total = weeklyData.reduce((sum: number, val: number) => sum + val, 0);
+        const average = total / 7;
+        const maxValue = Math.max(...weeklyData);
+        
+        // Calcular tendencia (comparar primera mitad vs segunda mitad)
+        const firstHalf = weeklyData.slice(0, 3).reduce((sum: number, val: number) => sum + val, 0) / 3;
+        const secondHalf = weeklyData.slice(4, 7).reduce((sum: number, val: number) => sum + val, 0) / 3;
+        const trendPercent = firstHalf > 0 ? ((secondHalf - firstHalf) / firstHalf) * 100 : 0;
+        
+        // Actualizar elementos
+        const maxEl = document.getElementById('max-weekly-consumption');
+        const avgEl = document.getElementById('avg-daily-consumption');
+        const totalEl = document.getElementById('total-weekly-consumption');
+        const trendEl = document.getElementById('weekly-trend');
+        
+        if (maxEl) maxEl.textContent = `${Math.round(maxValue * 10) / 10} kWh`;
+        if (avgEl) avgEl.textContent = `${Math.round(average * 10) / 10} kWh`;
+        if (totalEl) totalEl.textContent = `${Math.round(total * 10) / 10} kWh`;
+        
+        if (trendEl) {
+          const isPositive = trendPercent > 0;
+          const arrow = isPositive ? '↑' : '↓';
+          const color = isPositive ? 'text-red-600' : 'text-green-600';
+          trendEl.innerHTML = `<span class="${color}">${arrow} ${Math.abs(Math.round(trendPercent))}%</span>`;
+        }
+      }
+      
+      function updateSmartTips() {
+        const records = dataManager.getRecords();
+        const stats = dataManager.getMonthlyStats();
+        
+        if (records.length === 0) return;
+        
+        // Calcular tips basados en datos reales
+        const avgTemp = records.reduce((sum, record) => sum + record.temperature, 0) / records.length;
+        const avgHours = records.reduce((sum, record) => sum + record.hoursUsed, 0) / records.length;
+        const avgCost = stats.cost;
+        
+        const tipsContainer = document.getElementById('smart-tips');
+        if (tipsContainer) {
+          tipsContainer.innerHTML = `
+            <div class="flex items-start space-x-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div class="w-7 h-7 bg-white/20 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-sm">🌡️</span>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-0.5 text-sm">Temperatura Óptima</h4>
+                <p class="text-xs text-white/90 leading-relaxed">Tu promedio: ${Math.round(avgTemp)}°C. Reduce 1°C para ahorrar $${Math.round(avgCost * 0.08).toLocaleString()}/mes</p>
+                <div class="mt-1.5 text-xs bg-white/20 rounded-full px-2 py-0.5 inline-block">
+                  💰 Ahorro potencial: $${Math.round(avgCost * 0.08).toLocaleString()}/mes
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div class="w-7 h-7 bg-white/20 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-sm">⏰</span>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-0.5 text-sm">Optimización de Horarios</h4>
+                <p class="text-xs text-white/90 leading-relaxed">Usas ${Math.round(avgHours)}h/día. Reduce 1h para ahorrar ${Math.round((avgCost/avgHours) * 0.15)}% del costo</p>
+                <div class="mt-1.5 text-xs bg-white/20 rounded-full px-2 py-0.5 inline-block">
+                  ⚡ Ahorro: ${Math.round((avgCost/avgHours) * 0.15)}% energía
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-start space-x-3 p-3 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div class="w-7 h-7 bg-white/20 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-sm">📊</span>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-0.5 text-sm">Análisis de Consumo</h4>
+                <p class="text-xs text-white/90 leading-relaxed">Tienes ${records.length} registros. Emisiones: ${Math.round(stats.emissions)}kg CO₂/mes</p>
+                <div class="mt-1.5 text-xs bg-white/20 rounded-full px-2 py-0.5 inline-block">
+                  🌍 Huella: ${Math.round(stats.emissions)}kg CO₂
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Navegación suave
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
+          const target = document.querySelector(href as string);
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Inicializar dashboard
+      updateDashboard();
+    });
+  </script>
+</Layout>
