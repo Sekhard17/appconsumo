@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import QRGenerator from '../components/QRGenerator.astro';
+---
+
+<Layout title="Código QR - CalorSmart">
+  <Header />
+  
+  <main class="min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Título de la página -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 bg-clip-text text-transparent mb-4">
+          Código QR
+        </h1>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+          Comparte CalorSmart fácilmente con un código QR que redirige directamente a la aplicación
+        </p>
+      </div>
+
+      <!-- Componente QR -->
+      <div class="flex justify-center">
+        <QRGenerator />
+      </div>
+
+      <!-- Información adicional -->
+      <div class="mt-12 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/60 p-8">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Escanea con tu móvil</h3>
+            <p class="text-sm text-gray-600">Usa la cámara de tu teléfono para escanear el código QR</p>
+          </div>
+
+          <div class="text-center">
+            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Acceso directo</h3>
+            <p class="text-sm text-gray-600">Te redirigirá automáticamente a CalorSmart</p>
+          </div>
+
+          <div class="text-center">
+            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Comparte fácilmente</h3>
+            <p class="text-sm text-gray-600">Descarga el QR o comparte la URL directamente</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout> 
