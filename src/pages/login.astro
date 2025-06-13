@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="CalorSmart - Iniciar Sesión">
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+    <div class="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-8">
+      <!-- Logo -->
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">CalorSmart</h1>
+        <p class="text-gray-600 text-sm">Optimiza tu calefacción</p>
+      </div>
+
+      <!-- Formulario de Login -->
+      <form id="loginForm" class="space-y-6">
+        <div>
+          <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Correo Electrónico</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+            placeholder="tu@email.com"
+          >
+        </div>
+        
+        <div>
+          <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Contraseña</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+            placeholder="Tu contraseña"
+          >
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <label class="flex items-center">
+            <input type="checkbox" class="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded">
+            <span class="ml-2 text-sm text-gray-600">Recordarme</span>
+          </label>
+          <a href="#" class="text-sm text-orange-600 hover:text-orange-500">¿Olvidaste tu contraseña?</a>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200 transform hover:scale-105"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+      
+      <!-- Registro -->
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+          ¿No tienes cuenta? 
+          <a href="/registro" class="text-orange-600 hover:text-orange-500 font-semibold">Regístrate aquí</a>
+        </p>
+      </div>
+      
+      <!-- Login de Demo -->
+      <div class="mt-4 pt-4 border-t border-gray-200">
+        <button 
+          id="demoLogin" 
+          class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+        >
+          🚀 Acceso de Demostración
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('loginForm');
+      const demoButton = document.getElementById('demoLogin');
+      
+      // Función para login
+      function handleLogin(isDemo = false, email = '', password = '') {
+        if (isDemo) {
+          // Login de demostración
+          localStorage.setItem('calorSmart_user', JSON.stringify({
+            id: 'demo',
+            email: 'demo@calorsmart.com',
+            name: 'Usuario Demo',
+            loginTime: new Date().toISOString(),
+            isDemo: true
+          }));
+        } else {
+          // Login normal (por ahora simular)
+          localStorage.setItem('calorSmart_user', JSON.stringify({
+            id: Date.now().toString(),
+            email: email,
+            name: email.split('@')[0],
+            loginTime: new Date().toISOString(),
+            isDemo: false
+          }));
+        }
+        
+        // Redirigir al dashboard
+        window.location.href = '/';
+      }
+      
+      // Manejar submit del formulario
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Validación simple (en producción usarías un backend real)
+        if (email && password.length >= 6) {
+          handleLogin(false, email, password);
+        } else {
+          alert('Por favor, completa todos los campos. La contraseña debe tener al menos 6 caracteres.');
+        }
+      });
+      
+      // Login de demo
+      demoButton.addEventListener('click', () => {
+        handleLogin(true);
+      });
+    });
+  </script>
+</Layout>
+

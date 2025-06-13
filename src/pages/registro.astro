@@ -73,7 +73,7 @@ import Header from '../components/Header.astro';
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label for="cantidad" class="block text-sm font-semibold text-gray-700 mb-2">
-                      Cantidad <span class="text-xs text-gray-500" id="unidad-label">(kg/m³/kWh)</span>
+                      Cantidad <span class="text-xs text-gray-500" id="unidad-label">(kg/cilindros/kWh)</span>
                     </label>
                     <div class="relative">
                       <input 
@@ -258,7 +258,7 @@ import { FormValidator } from './FormValidator.mts';
       emissions: number;
     }
 
-    // Factores de conversión y precios (datos de ejemplo para Chile)
+    // Factores de conversión y precios actualizados para Chile
     const CONVERSION_FACTORS = {
       pellet: {
         energyPerKg: 4.5, // kWh por kg
@@ -267,10 +267,10 @@ import { FormValidator } from './FormValidator.mts';
         unit: 'kg'
       },
       gas: {
-        energyPerM3: 10.5, // kWh por m³
-        costPerM3: 650, // pesos chilenos por m³
-        co2PerM3: 2.3, // kg CO2 por m³
-        unit: 'm³'
+        energyPerCylinder: 105, // kWh por cilindro (15kg ≈ 10m³)
+        costPerCylinder: 6500, // pesos chilenos por cilindro de 15kg
+        co2PerCylinder: 23, // kg CO2 por cilindro
+        unit: 'cilindros'
       },
       electric: {
         energyPerKwh: 1, // kWh por kWh
@@ -307,11 +307,21 @@ import { FormValidator } from './FormValidator.mts';
         const selectedType = document.querySelector('input[name="tipo"]:checked') as HTMLInputElement;
         const unitLabel = document.getElementById('unidad-label');
         const unitDisplay = document.getElementById('unidad-display');
+        const cantidadInput = document.getElementById('cantidad') as HTMLInputElement;
         
         if (selectedType && unitLabel && unitDisplay) {
           const factor = CONVERSION_FACTORS[selectedType.value as keyof typeof CONVERSION_FACTORS];
           unitLabel.textContent = `(${factor.unit})`;
           unitDisplay.textContent = factor.unit;
+          
+          // Actualizar placeholder según el tipo
+          if (selectedType.value === 'pellet') {
+            cantidadInput.placeholder = 'Ej: 15.5';
+          } else if (selectedType.value === 'gas') {
+            cantidadInput.placeholder = 'Ej: 1';
+          } else if (selectedType.value === 'electric') {
+            cantidadInput.placeholder = 'Ej: 25.0';
+          }
         }
       }
 
@@ -342,8 +352,8 @@ import { FormValidator } from './FormValidator.mts';
              emissions = cantidad * factor.co2PerKg;
            } else if (tipo === 'gas') {
              const factor = CONVERSION_FACTORS.gas;
-             cost = cantidad * factor.costPerM3;
-             emissions = cantidad * factor.co2PerM3;
+             cost = cantidad * factor.costPerCylinder;
+             emissions = cantidad * factor.co2PerCylinder;
            } else if (tipo === 'electric') {
              const factor = CONVERSION_FACTORS.electric;
              cost = cantidad * factor.costPerKwh;
@@ -437,8 +447,8 @@ import { FormValidator } from './FormValidator.mts';
              emissions = cantidad * factor.co2PerKg;
            } else if (tipo === 'gas') {
              const factor = CONVERSION_FACTORS.gas;
-             cost = cantidad * factor.costPerM3;
-             emissions = cantidad * factor.co2PerM3;
+             cost = cantidad * factor.costPerCylinder;
+             emissions = cantidad * factor.co2PerCylinder;
            } else if (tipo === 'electric') {
              const factor = CONVERSION_FACTORS.electric;
              cost = cantidad * factor.costPerKwh;

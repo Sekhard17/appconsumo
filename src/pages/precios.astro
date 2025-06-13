@@ -1,0 +1,337 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="CalorSmart - Información de Precios">
+  <Header />
+  
+  <main class="py-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Título -->
+      <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 Información de Precios</h1>
+        <p class="text-gray-600">Conoce las fuentes y cálculos utilizados en CalorSmart</p>
+      </div>
+
+      <!-- Información actualizada -->
+      <div class="mb-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+        <div class="flex items-center mb-3">
+          <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+            <span class="text-xl">🔄</span>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold">Precios Actualizados</h3>
+            <p class="text-blue-100 text-sm">Información vigente para Chile - Diciembre 2024</p>
+          </div>
+        </div>
+        <p class="text-sm text-blue-100">Los precios son referenciales y pueden variar según la región, proveedor y temporada.</p>
+      </div>
+
+      <!-- Pellet -->
+      <div class="mb-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
+        <div class="bg-gradient-to-r from-amber-500 to-orange-500 px-6 py-4">
+          <div class="flex items-center">
+            <span class="text-2xl mr-3">🔥</span>
+            <div>
+              <h2 class="text-xl font-bold text-white">Pellet</h2>
+              <p class="text-amber-100 text-sm">Calefacción Ecológica</p>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Precio Actual</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-green-600 mb-1">$350 / kg</div>
+                <div class="text-sm text-gray-600">Precio promedio en Chile</div>
+              </div>
+              
+              <div class="mt-4 space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Energía por kg:</span>
+                  <span class="font-semibold">4.5 kWh</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Emisiones CO₂:</span>
+                  <span class="font-semibold">0.1 kg / kg</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Fuentes de Información</h3>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Asociación Chilena de Biomasa (ChileBio)</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Precios promedio retail grandes tiendas</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Fabricantes nacionales (Arauco, CMPC)</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Ministerio de Energía de Chile</span>
+                </li>
+              </ul>
+              
+              <div class="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <p class="text-xs text-amber-800">
+                  <strong>Nota:</strong> El pellet premium puede costar entre $380-420/kg, 
+                  mientras que el estándar oscila entre $320-350/kg.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gas -->
+      <div class="mb-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-4">
+          <div class="flex items-center">
+            <span class="text-2xl mr-3">🏮</span>
+            <div>
+              <h2 class="text-xl font-bold text-white">Gas (Cilindro)</h2>
+              <p class="text-blue-100 text-sm">Calefacción Tradicional</p>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Precio Actual</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-green-600 mb-1">$6.500 / cilindro</div>
+                <div class="text-sm text-gray-600">Cilindro de 15kg (estándar)</div>
+              </div>
+              
+              <div class="mt-4 space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Equivalencia:</span>
+                  <span class="font-semibold">~10 m³ de gas</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Energía por cilindro:</span>
+                  <span class="font-semibold">105 kWh</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Emisiones CO₂:</span>
+                  <span class="font-semibold">23 kg / cilindro</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Fuentes de Información</h3>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Empresas Lipigas, Gasco, Abastible</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Precios de venta al público diciembre 2024</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Ministerio de Energía de Chile</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Comisión Nacional de Energía (CNE)</span>
+                </li>
+              </ul>
+              
+              <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <p class="text-xs text-blue-800">
+                  <strong>Nota:</strong> Los precios varían entre $6.200-7.000 según la empresa 
+                  y ubicación. Incluye IVA pero no servicio de entrega.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eléctrica -->
+      <div class="mb-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
+        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 px-6 py-4">
+          <div class="flex items-center">
+            <span class="text-2xl mr-3">⚡</span>
+            <div>
+              <h2 class="text-xl font-bold text-white">Calefacción Eléctrica</h2>
+              <p class="text-yellow-100 text-sm">Calefacción Moderna</p>
+            </div>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Precio Actual</h3>
+              <div class="bg-gray-50 rounded-lg p-4">
+                <div class="text-2xl font-bold text-green-600 mb-1">$150 / kWh</div>
+                <div class="text-sm text-gray-600">Promedio tarifas residenciales</div>
+              </div>
+              
+              <div class="mt-4 space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Tarifa BT1 (0-150 kWh):</span>
+                  <span class="font-semibold">$120/kWh</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Tarifa BT1 (151+ kWh):</span>
+                  <span class="font-semibold">$180/kWh</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-600">Emisiones CO₂:</span>
+                  <span class="font-semibold">0.4 kg / kWh</span>
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Fuentes de Información</h3>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Comisión Nacional de Energía (CNE)</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Empresas eléctricas (Enel, CGE, Chilquinta)</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Cuadro tarifario BT1 vigente</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2">✓</span>
+                  <span>Factor emisión SEN (Sistema Eléctrico Nacional)</span>
+                </li>
+              </ul>
+              
+              <div class="mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                <p class="text-xs text-yellow-800">
+                  <strong>Nota:</strong> El precio varía según la empresa distribuidora 
+                  y puede incluir cargos fijos adicionales.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metodología de Cálculo -->
+      <div class="mb-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-xl font-bold text-gray-900 flex items-center">
+            <span class="mr-2">🧮</span>
+            Metodología de Cálculo
+          </h2>
+        </div>
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Cálculo de Costos</h3>
+              <div class="space-y-3 text-sm">
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <strong>Pellet:</strong><br>
+                  Costo = Cantidad (kg) × $350
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <strong>Gas:</strong><br>
+                  Costo = Cantidad (cilindros) × $6.500
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <strong>Eléctrica:</strong><br>
+                  Costo = Consumo (kWh) × $150
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Cálculo de Emisiones</h3>
+              <div class="space-y-3 text-sm">
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <strong>Pellet:</strong><br>
+                  CO₂ = Cantidad (kg) × 0.1 kg CO₂/kg
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <strong>Gas:</strong><br>
+                  CO₂ = Cantidad (cilindros) × 23 kg CO₂/cilindro
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3">
+                  <strong>Eléctrica:</strong><br>
+                  CO₂ = Consumo (kWh) × 0.4 kg CO₂/kWh
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actualización de datos -->
+      <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-6 text-white">
+        <div class="flex items-center mb-4">
+          <span class="text-2xl mr-3">📅</span>
+          <div>
+            <h3 class="text-lg font-bold">Actualización de Datos</h3>
+            <p class="text-gray-300 text-sm">Política de actualización de precios</p>
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div>
+            <h4 class="font-semibold mb-2 text-gray-200">Frecuencia de Actualización:</h4>
+            <ul class="space-y-1 text-gray-300">
+              <li>• Precios de combustibles: Mensual</li>
+              <li>• Tarifas eléctricas: Trimestral</li>
+              <li>• Factores de emisión: Anual</li>
+              <li>• Revisión general: Cada 6 meses</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 class="font-semibold mb-2 text-gray-200">Última Actualización:</h4>
+            <div class="text-gray-300">
+              <div class="flex justify-between">
+                <span>Pellet:</span>
+                <span>Diciembre 2024</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Gas:</span>
+                <span>Diciembre 2024</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Electricidad:</span>
+                <span>Noviembre 2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-4 p-3 bg-white/10 rounded-lg border border-white/20">
+          <p class="text-xs text-gray-300">
+            Los precios mostrados son referenciales y se basan en fuentes oficiales. 
+            Para decisiones importantes, recomendamos consultar directamente con los proveedores.
+          </p>
+        </div>
+      </div>
+
+      <!-- Botón de regreso -->
+      <div class="mt-8 text-center">
+        <a href="/" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200">
+          ← Volver al Dashboard
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>
+

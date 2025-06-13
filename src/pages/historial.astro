@@ -1,0 +1,429 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+---
+
+<Layout title="CalorSmart - Historial de Consumo">
+  <Header />
+  
+  <main class="py-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Título -->
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-1">Historial de Consumo</h1>
+        <p class="text-gray-600 text-sm">Revisa tu historial de consumo por tipo de calefacción</p>
+      </div>
+
+      <!-- Filtros -->
+      <div class="mb-6 bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
+        <div class="flex flex-wrap gap-4 items-center">
+          <div class="flex items-center space-x-2">
+            <label class="text-sm font-semibold text-gray-700">Filtrar por tipo:</label>
+            <select id="typeFilter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+              <option value="all">Todos los tipos</option>
+              <option value="pellet">Pellet</option>
+              <option value="gas">Gas (Cilindro)</option>
+              <option value="electric">Eléctrica</option>
+            </select>
+          </div>
+          
+          <div class="flex items-center space-x-2">
+            <label class="text-sm font-semibold text-gray-700">Período:</label>
+            <select id="periodFilter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+              <option value="all">Todo el tiempo</option>
+              <option value="week">Última semana</option>
+              <option value="month">Último mes</option>
+              <option value="quarter">Últimos 3 meses</option>
+            </select>
+          </div>
+          
+          <button id="exportBtn" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 text-sm font-semibold">
+            📊 Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumen por tipo -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Pellet -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">🔥</span>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-bold text-gray-900">Pellet</h3>
+              <p class="text-sm text-gray-600">Calefacción ecológica</p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Total registros:</span>
+              <span class="font-semibold" id="pellet-count">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Consumo total:</span>
+              <span class="font-semibold" id="pellet-total">0 kg</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Costo total:</span>
+              <span class="font-semibold text-green-600" id="pellet-cost">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gas -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">🏮</span>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-bold text-gray-900">Gas (Cilindro)</h3>
+              <p class="text-sm text-gray-600">Calefacción tradicional</p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Total registros:</span>
+              <span class="font-semibold" id="gas-count">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Consumo total:</span>
+              <span class="font-semibold" id="gas-total">0 cilindros</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Costo total:</span>
+              <span class="font-semibold text-green-600" id="gas-cost">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eléctrica -->
+        <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-lg">⚡</span>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-bold text-gray-900">Eléctrica</h3>
+              <p class="text-sm text-gray-600">Calefacción moderna</p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Total registros:</span>
+              <span class="font-semibold" id="electric-count">0</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Consumo total:</span>
+              <span class="font-semibold" id="electric-total">0 kWh</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-600">Costo total:</span>
+              <span class="font-semibold text-green-600" id="electric-cost">$0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de registros -->
+      <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-bold text-gray-900">Registros Detallados</h3>
+          <p class="text-sm text-gray-600 mt-1">Historial completo de tu consumo energético</p>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50/50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Fecha</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Tipo</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Cantidad</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Temperatura</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Horas</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Costo</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">CO₂</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody" class="bg-white/50 divide-y divide-gray-200">
+              <!-- Los registros se cargarán dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Mensaje cuando no hay datos -->
+        <div id="noDataMessage" class="hidden p-12 text-center">
+          <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">No hay registros</h3>
+          <p class="text-gray-600 mb-4">Aún no tienes registros de consumo. ¡Comienza agregando tu primer registro!</p>
+          <a href="/registro" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200">
+            📝 Agregar Registro
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const typeFilter = document.getElementById('typeFilter');
+      const periodFilter = document.getElementById('periodFilter');
+      const exportBtn = document.getElementById('exportBtn');
+      const tableBody = document.getElementById('historyTableBody');
+      const noDataMessage = document.getElementById('noDataMessage');
+      
+      // Factores de conversión actualizados
+      const CONVERSION_FACTORS = {
+        pellet: {
+          energyPerKg: 4.5,
+          costPerKg: 350,
+          co2PerKg: 0.1,
+          unit: 'kg'
+        },
+        gas: {
+          energyPerCylinder: 105, // Aproximadamente 10m³ por cilindro
+          costPerCylinder: 6500, // Precio por cilindro de 15kg
+          co2PerCylinder: 23, // kg CO2 por cilindro
+          unit: 'cilindros'
+        },
+        electric: {
+          energyPerKwh: 1,
+          costPerKwh: 150,
+          co2PerKwh: 0.4,
+          unit: 'kWh'
+        }
+      };
+      
+      // Gestión de datos
+      class HistoryManager {
+        constructor() {
+          this.storageKey = 'calorSmart_data';
+        }
+        
+        getRecords() {
+          const data = localStorage.getItem(this.storageKey);
+          return data ? JSON.parse(data) : [];
+        }
+        
+        filterRecords(type = 'all', period = 'all') {
+          let records = this.getRecords();
+          
+          // Filtrar por tipo
+          if (type !== 'all') {
+            records = records.filter(record => record.type === type);
+          }
+          
+          // Filtrar por período
+          if (period !== 'all') {
+            const now = new Date();
+            let cutoffDate;
+            
+            switch (period) {
+              case 'week':
+                cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                break;
+              case 'month':
+                cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                break;
+              case 'quarter':
+                cutoffDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+                break;
+            }
+            
+            if (cutoffDate) {
+              records = records.filter(record => {
+                const recordDate = new Date(record.date);
+                return recordDate >= cutoffDate;
+              });
+            }
+          }
+          
+          return records.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+        
+        getStatsByType() {
+          const records = this.getRecords();
+          const stats = {
+            pellet: { count: 0, total: 0, cost: 0 },
+            gas: { count: 0, total: 0, cost: 0 },
+            electric: { count: 0, total: 0, cost: 0 }
+          };
+          
+          records.forEach(record => {
+            if (stats[record.type]) {
+              stats[record.type].count++;
+              stats[record.type].total += record.amount;
+              stats[record.type].cost += record.cost;
+            }
+          });
+          
+          return stats;
+        }
+      }
+      
+      const historyManager = new HistoryManager();
+      
+      // Funciones de utilidad
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-CL', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+      
+      function getTypeIcon(type) {
+        const icons = {
+          pellet: '🔥',
+          gas: '🏮',
+          electric: '⚡'
+        };
+        return icons[type] || '❓';
+      }
+      
+      function getTypeName(type) {
+        const names = {
+          pellet: 'Pellet',
+          gas: 'Gas (Cilindro)',
+          electric: 'Eléctrica'
+        };
+        return names[type] || type;
+      }
+      
+      function getTypeColor(type) {
+        const colors = {
+          pellet: 'bg-amber-100 text-amber-800',
+          gas: 'bg-blue-100 text-blue-800',
+          electric: 'bg-yellow-100 text-yellow-800'
+        };
+        return colors[type] || 'bg-gray-100 text-gray-800';
+      }
+      
+      // Actualizar resumen por tipo
+      function updateTypeSummary() {
+        const stats = historyManager.getStatsByType();
+        
+        // Pellet
+        document.getElementById('pellet-count').textContent = stats.pellet.count;
+        document.getElementById('pellet-total').textContent = `${stats.pellet.total.toFixed(1)} kg`;
+        document.getElementById('pellet-cost').textContent = `$${stats.pellet.cost.toLocaleString()}`;
+        
+        // Gas
+        document.getElementById('gas-count').textContent = stats.gas.count;
+        document.getElementById('gas-total').textContent = `${stats.gas.total.toFixed(1)} cilindros`;
+        document.getElementById('gas-cost').textContent = `$${stats.gas.cost.toLocaleString()}`;
+        
+        // Eléctrica
+        document.getElementById('electric-count').textContent = stats.electric.count;
+        document.getElementById('electric-total').textContent = `${stats.electric.total.toFixed(1)} kWh`;
+        document.getElementById('electric-cost').textContent = `$${stats.electric.cost.toLocaleString()}`;
+      }
+      
+      // Actualizar tabla
+      function updateTable() {
+        const type = typeFilter.value;
+        const period = periodFilter.value;
+        const records = historyManager.filterRecords(type, period);
+        
+        if (records.length === 0) {
+          tableBody.innerHTML = '';
+          noDataMessage.classList.remove('hidden');
+          return;
+        }
+        
+        noDataMessage.classList.add('hidden');
+        
+        tableBody.innerHTML = records.map(record => {
+          let unitDisplay = '';
+          if (record.type === 'pellet') {
+            unitDisplay = `${record.amount} kg`;
+          } else if (record.type === 'gas') {
+            unitDisplay = `${record.amount} cilindros`;
+          } else if (record.type === 'electric') {
+            unitDisplay = `${record.amount} kWh`;
+          }
+          
+          return `
+            <tr class="hover:bg-white/80 transition-colors">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${formatDate(record.date)}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(record.type)}">
+                  ${getTypeIcon(record.type)} ${getTypeName(record.type)}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                ${unitDisplay}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${record.temperature}°C
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${record.hoursUsed}h
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">
+                $${record.cost.toLocaleString()}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                ${record.emissions.toFixed(1)} kg
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+      
+      // Exportar a CSV
+      function exportToCSV() {
+        const type = typeFilter.value;
+        const period = periodFilter.value;
+        const records = historyManager.filterRecords(type, period);
+        
+        if (records.length === 0) {
+          alert('No hay datos para exportar');
+          return;
+        }
+        
+        const headers = ['Fecha', 'Tipo', 'Cantidad', 'Unidad', 'Temperatura', 'Horas', 'Costo', 'Emisiones CO2'];
+        const csvContent = [
+          headers.join(','),
+          ...records.map(record => [
+            record.date,
+            getTypeName(record.type),
+            record.amount,
+            CONVERSION_FACTORS[record.type].unit,
+            record.temperature,
+            record.hoursUsed,
+            record.cost,
+            record.emissions.toFixed(2)
+          ].join(','))
+        ].join('\n');
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `calorsmart_historial_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+      }
+      
+      // Event listeners
+      typeFilter.addEventListener('change', updateTable);
+      periodFilter.addEventListener('change', updateTable);
+      exportBtn.addEventListener('click', exportToCSV);
+      
+      // Inicializar
+      updateTypeSummary();
+      updateTable();
+    });
+  </script>
+</Layout>
+

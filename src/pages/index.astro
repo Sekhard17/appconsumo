@@ -15,6 +15,16 @@ import Dashboard from '../components/Dashboard.astro';
   <script>
     import { toast } from '../components/Toast.ts';
     
+    // Verificar autenticación
+    function checkAuth() {
+      const user = localStorage.getItem('calorSmart_user');
+      if (!user) {
+        window.location.href = '/login';
+        return false;
+      }
+      return true;
+    }
+    
     // Tipos de datos
     interface ConsumptionRecord {
       id: string;
@@ -28,7 +38,7 @@ import Dashboard from '../components/Dashboard.astro';
       emissions: number;
     }
 
-    // Factores de conversión y precios (datos de ejemplo para Chile)
+    // Factores de conversión y precios actualizados para Chile
     const CONVERSION_FACTORS = {
       pellet: {
         energyPerKg: 4.5, // kWh por kg
@@ -37,10 +47,10 @@ import Dashboard from '../components/Dashboard.astro';
         unit: 'kg'
       },
       gas: {
-        energyPerM3: 10.5, // kWh por m³
-        costPerM3: 650, // pesos chilenos por m³
-        co2PerM3: 2.3, // kg CO2 por m³
-        unit: 'm³'
+        energyPerCylinder: 105, // kWh por cilindro (15kg ≈ 10m³)
+        costPerCylinder: 6500, // pesos chilenos por cilindro de 15kg
+        co2PerCylinder: 23, // kg CO2 por cilindro
+        unit: 'cilindros'
       },
       electric: {
         energyPerKwh: 1, // kWh por kWh
@@ -81,7 +91,7 @@ import Dashboard from '../components/Dashboard.astro';
           const factor = CONVERSION_FACTORS[record.type];
           let energyValue = 0;
           if ('energyPerKg' in factor) energyValue = factor.energyPerKg;
-          else if ('energyPerM3' in factor) energyValue = factor.energyPerM3;
+          else if ('energyPerCylinder' in factor) energyValue = factor.energyPerCylinder;
           else if ('energyPerKwh' in factor) energyValue = factor.energyPerKwh;
           return sum + (record.amount * energyValue);
         }, 0);
@@ -407,6 +417,17 @@ import Dashboard from '../components/Dashboard.astro';
         });
       });
 
+      // Verificar autenticación al cargar la página
+      if (!checkAuth()) {
+        return; // Detener ejecución si no está autenticado
+      }
+      
+      // Mostrar información del usuario
+      const user = JSON.parse(localStorage.getItem('calorSmart_user') || '{}');
+      if (user.name) {
+        toast.info(`¡Bienvenido de vuelta, ${user.name}!`, 'Sesión iniciada');
+      }
+      
       // Inicializar dashboard
       updateDashboard();
     });
